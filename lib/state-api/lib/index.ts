@@ -17,15 +17,25 @@ export type IndexArticle = {
 export type IndexAuthor = {
   [key: string]: IAuthor
 }
-type IData = {
+export type IData = {
   articles: IArticle[]
   authors: IAuthor[]
 }
+type IndexData = {
+  articles: IndexArticle
+  authors: IndexAuthor
+}
 
-class DataApi {
-  constructor(private rowData: IData) {}
+class StateApi {
+  private data: IndexData
 
-  // tslint:disable-next-line: prefer-array-literal
+  constructor(rowData: IData) {
+    this.data = {
+      articles: <IndexArticle>this.mapIntoObject(rowData.articles),
+      authors: <IndexAuthor>this.mapIntoObject(rowData.authors),
+    }
+  }
+
   mapIntoObject<T extends IArticle | IAuthor>(arr: T[]) {
     return arr.reduce(
       (acc, cur) => {
@@ -36,13 +46,13 @@ class DataApi {
     )
   }
 
-  getArticles() {
-    return <IndexArticle>this.mapIntoObject(this.rowData.articles)
+  getState() {
+    return this.data
   }
 
-  getAuthors() {
-    return <IndexAuthor>this.mapIntoObject(this.rowData.authors)
+  lookupAuthor(authorId: string): IAuthor {
+    return this.data.authors[authorId]
   }
 }
 
-export default DataApi
+export default StateApi

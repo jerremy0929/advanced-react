@@ -1,11 +1,12 @@
-import DataApi, { IArticle, IAuthor } from '../DataApi'
+// tslint:disable-next-line: no-implicit-dependencies
+import StateApi, { IArticle, IAuthor } from 'state-api'
 import dummy from '../testData.json'
 
-const api: DataApi = new DataApi(dummy.data)
+const store = new StateApi(dummy.data)
 
-describe('DataApi', () => {
+describe('StateApi', () => {
   it('exposes articles as an object', () => {
-    const articles = api.getArticles()
+    const articles = store.getState().articles
     const articleId = dummy.data.articles[0].id
     const articleTitle = dummy.data.articles[0].title
 
@@ -14,7 +15,7 @@ describe('DataApi', () => {
   })
 
   it('exposes authors as an object', () => {
-    const authors = api.getAuthors()
+    const authors = store.getState().authors
     const authorId = dummy.data.authors[0].id
     const authorFirstName = dummy.data.authors[0].firstName
     expect(authors).toHaveProperty(authorId)

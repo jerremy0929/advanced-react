@@ -1,5 +1,6 @@
 import React from 'react'
-import { IArticle, IAuthor } from '../DataApi'
+// tslint:disable-next-line: no-implicit-dependencies
+import StateApi, { IArticle } from 'state-api'
 
 const styles: { [key: string]: React.CSSProperties } = {
   article: {
@@ -29,9 +30,9 @@ const dateDisplay = (dateString: string): string => {
 
 const Article: React.FC<{
   article: IArticle
-  action: { [key: string]: (id: string) => IAuthor }
-}> = ({ article, action }) => {
-  const author = action.lookupAuthor(article.authorId)
+  store: StateApi
+}> = ({ article, store }) => {
+  const author = store.lookupAuthor(article.authorId)
   return (
     <div style={styles.article}>
       <div style={styles.title}>{article.title}</div>

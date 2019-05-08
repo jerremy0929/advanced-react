@@ -5,7 +5,7 @@
   "rules": {
     "prettier": true,
     "import-name": false,
-    "no-implicit-dependencies": [true, "dev"],
+    "no-implicit-dependencies": [true, "dev", ["lib"]],
     "no-console": [true, "log"],
     "object-literal-sort-keys": false,
     "quotemark": [true, "single", "jsx-double"],

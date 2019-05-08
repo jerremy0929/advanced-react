@@ -7,11 +7,12 @@
   "author": "jerremy",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon lib/server.ts",
+    "dev": "NODE_PATH=./lib nodemon lib/server.ts",
     "build": "webpack -wd",
     "test": "jest --watch"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
     "react": "^16.8.6",

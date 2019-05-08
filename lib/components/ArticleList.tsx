@@ -1,15 +1,16 @@
 import React from 'react'
 import Article from './Article'
-import { IndexArticle, IAuthor } from '../DataApi'
+// tslint:disable-next-line: no-implicit-dependencies
+import StateApi, { IndexArticle } from 'state-api'
 
 const ArticleList: React.FC<{
   articles: IndexArticle
-  articleActions: { [key: string]: (id: string) => IAuthor }
-}> = ({ articles, articleActions }) => {
+  store: StateApi
+}> = ({ articles, store }) => {
   return (
     <div>
       {Object.values(articles).map(article => (
-        <Article key={article.id} article={article} action={articleActions} />
+        <Article key={article.id} article={article} store={store} />
       ))}
     </div>
   )

@@ -1,21 +1,12 @@
 import React, { useState } from 'react'
-import DataApi, { IndexArticle, IndexAuthor, IAuthor } from '../DataApi'
 import ArticleList from './ArticleList'
+// tslint:disable-next-line: no-implicit-dependencies
+import StateApi from 'state-api'
 
-import dummy from '../testData.json'
+const App: React.FC<{ store: StateApi }> = ({ store }) => {
+  const [storeState] = useState(store.getState())
 
-const api = new DataApi(dummy.data)
-
-const App: React.FC = () => {
-  const [articles /* , setArticles */] = useState<IndexArticle>(
-    api.getArticles(),
-  )
-  const [authors /* , setAuthors */] = useState<IndexAuthor>(api.getAuthors())
-  const articleActions: { [key: string]: (id: string) => IAuthor } = {
-    lookupAuthor: authorId => authors[authorId],
-  }
-
-  return <ArticleList articles={articles} articleActions={articleActions} />
+  return <ArticleList articles={storeState.articles} store={store} />
 }
 
 export default App

@@ -1,6 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App from './App'
+// tslint:disable-next-line: no-implicit-dependencies
+import App from 'components/App'
+// tslint:disable-next-line: no-implicit-dependencies
+import StateApi, { IData } from 'state-api'
 
 /*
 const App: React.FC = () => {
@@ -24,4 +27,10 @@ const App: React.FC = () => {
 
 // ReactDOM.render(<App />, document.getElementById('root'))
 // React v17 server side render
-ReactDOM.hydrate(<App />, document.getElementById('root'))
+declare global {
+  interface Window {
+    initialData: IData
+  }
+}
+const store = new StateApi(window.initialData)
+ReactDOM.hydrate(<App store={store} />, document.getElementById('root'))
