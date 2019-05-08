@@ -1,12 +1,24 @@
-import React, { useState } from 'react'
+import React from 'react'
+// tslint:disable-next-line: no-implicit-dependencies
+import PropTypes from 'prop-types'
 import ArticleList from './ArticleList'
 // tslint:disable-next-line: no-implicit-dependencies
 import StateApi from 'state-api'
 
-const App: React.FC<{ store: StateApi }> = ({ store }) => {
-  const [storeState] = useState(store.getState())
+class App extends React.Component<{ store: StateApi }> {
+  state = this.props.store.getState()
 
-  return <ArticleList articles={storeState.articles} store={store} />
+  static childContextTypes = {
+    store: PropTypes.object,
+  }
+
+  getChildContext = () => ({
+    store: this.props.store,
+  })
+
+  render() {
+    return <ArticleList articles={this.state.articles} />
+  }
 }
 
 export default App
