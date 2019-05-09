@@ -1,8 +1,11 @@
 import React, { Component, ChangeEvent } from 'react'
+import storeProvider from './storeProvider'
+// tslint:disable-next-line: no-implicit-dependencies
+import StateApi from 'state-api'
 import debounce from 'lodash.debounce'
 
-export default class SearchBar extends Component<
-  { doSearch: (text: string) => void },
+class SearchBar extends Component<
+  { store?: StateApi },
   { searchTerm: string }
 > {
   state = {
@@ -10,7 +13,7 @@ export default class SearchBar extends Component<
   }
 
   doSearch = debounce(() => {
-    this.props.doSearch(this.state.searchTerm)
+    this.props.store!.setSearchTerm(this.state.searchTerm)
   }, 300)
 
   handleSearch = (evt: ChangeEvent<HTMLInputElement>) => {
@@ -30,3 +33,5 @@ export default class SearchBar extends Component<
     )
   }
 }
+
+export default storeProvider()(SearchBar)

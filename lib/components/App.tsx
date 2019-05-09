@@ -39,15 +39,16 @@ class App extends React.Component<{ store: StateApi }> {
     let { articles } = this.state
 
     if (searchTerm) {
+      const regexp = new RegExp(searchTerm!, 'i')
       articles = pickby<IArticle>(articles, value => {
-        return value.title.match(searchTerm) || value.body.match(searchTerm)
+        return value.title.match(regexp) || value.body.match(regexp)
       })
     }
 
     return (
       <div>
         <Timestamp />
-        <SearchBar doSearch={this.props.store.setSearchTerm} />
+        <SearchBar />
         <ArticleList articles={articles} />
       </div>
     )

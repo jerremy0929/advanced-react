@@ -21,7 +21,7 @@ const storeProvider = (extraProps: Function) => <P extends object>(
 }
 */
 
-const storeProvider = (extraProps: Function) => <P extends object>(
+const storeProvider = (extraProps: Function = () => ({})) => <P extends object>(
   Component: React.ComponentType<P>,
 ) => {
   class WithStore extends React.PureComponent<P> {
@@ -29,10 +29,12 @@ const storeProvider = (extraProps: Function) => <P extends object>(
     static contextTypes = {
       store: PropTypes.object,
     }
-    private subscriptionId: number = 0
+    private subscriptionId: number | null = 0
 
     onStoreChange = () => {
-      this.forceUpdate()
+      if (typeof this.subscriptionId === 'number') {
+        this.forceUpdate()
+      }
     }
 
     componentDidMount() {
@@ -41,6 +43,7 @@ const storeProvider = (extraProps: Function) => <P extends object>(
 
     componentWillUnmount() {
       this.context.store.unsubscribe(this.subscriptionId)
+      this.subscriptionId = null
     }
 
     render() {
