@@ -3,10 +3,21 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import ArticleList from './ArticleList'
 // tslint:disable-next-line: no-implicit-dependencies
-import StateApi from 'state-api'
+import StateApi, { IndexArticle, IArticle } from 'state-api'
+import SearchBar from './SearchBar'
+import pickby from 'lodash.pickby'
 
-class App extends React.Component<{ store: StateApi }> {
-  state = this.props.store.getState()
+class App extends React.Component<
+  { store: StateApi },
+  {
+    articles: IndexArticle
+    searchTerm: string
+  }
+> {
+  state = {
+    articles: this.props.store.getState().articles,
+    searchTerm: '',
+  }
 
   static childContextTypes = {
     store: PropTypes.object,
@@ -16,8 +27,25 @@ class App extends React.Component<{ store: StateApi }> {
     store: this.props.store,
   })
 
+  setSearchTerm = (searchTerm: string) => {
+    this.setState({ searchTerm })
+  }
+
   render() {
-    return <ArticleList articles={this.state.articles} />
+    let { articles } = this.state
+    const { searchTerm } = this.state
+    if (searchTerm) {
+      articles = pickby<IArticle>(articles, value => {
+        return value.title.match(searchTerm) || value.body.match(searchTerm)
+      })
+    }
+
+    return (
+      <div>
+        <SearchBar doSearch={this.setSearchTerm} />
+        <ArticleList articles={articles} />
+      </div>
+    )
   }
 }
 

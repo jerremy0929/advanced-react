@@ -24,6 +24,7 @@ export type IData = {
 type IndexData = {
   articles: IndexArticle
   authors: IndexAuthor
+  searchTerm?: string
 }
 
 class StateApi {
@@ -33,6 +34,7 @@ class StateApi {
     this.data = {
       articles: <IndexArticle>this.mapIntoObject(rowData.articles),
       authors: <IndexAuthor>this.mapIntoObject(rowData.authors),
+      searchTerm: '',
     }
   }
 
