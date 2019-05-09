@@ -1,10 +1,10 @@
-import React, { Component, ChangeEvent } from 'react'
+import React, { ChangeEvent } from 'react'
 import storeProvider from './storeProvider'
 // tslint:disable-next-line: no-implicit-dependencies
 import StateApi from 'state-api'
 import debounce from 'lodash.debounce'
 
-class SearchBar extends Component<
+class SearchBar extends React.PureComponent<
   { store?: StateApi },
   { searchTerm: string }
 > {
