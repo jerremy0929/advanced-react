@@ -46,7 +46,7 @@ class App extends React.Component<{ store: StateApi }> {
 
     return (
       <div>
-        <Timestamp timestamp={this.state.timestamp} />
+        <Timestamp />
         <SearchBar doSearch={this.props.store.setSearchTerm} />
         <ArticleList articles={articles} />
       </div>
