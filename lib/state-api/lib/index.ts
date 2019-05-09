@@ -25,6 +25,7 @@ type IndexData = {
   articles: IndexArticle
   authors: IndexAuthor
   searchTerm?: string
+  timestamp: Date
 }
 
 class StateApi {
@@ -37,6 +38,7 @@ class StateApi {
       articles: <IndexArticle>this.mapIntoObject(rowData.articles),
       authors: <IndexAuthor>this.mapIntoObject(rowData.authors),
       searchTerm: '',
+      timestamp: new Date(),
     }
     this.subscriptions = {}
     this.lastSubscriptionsId = 0
@@ -84,6 +86,12 @@ class StateApi {
       ...stateChange,
     }
     this.notifySubscripbers()
+  }
+
+  startClock = () => {
+    setInterval(() => {
+      this.mergeWithState({ timestamp: new Date() })
+    }, 1000)
   }
 }
 

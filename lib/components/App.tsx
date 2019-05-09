@@ -5,6 +5,7 @@ import ArticleList from './ArticleList'
 // tslint:disable-next-line: no-implicit-dependencies
 import StateApi, { IArticle } from 'state-api'
 import SearchBar from './SearchBar'
+import Timestamp from './Timestamp'
 import pickby from 'lodash.pickby'
 
 class App extends React.Component<{ store: StateApi }> {
@@ -26,6 +27,7 @@ class App extends React.Component<{ store: StateApi }> {
 
   componentDidMount() {
     this.subscriptionId = this.props.store.subscribe(this.onStoreChange)
+    this.props.store.startClock()
   }
 
   componentWillUnmount() {
@@ -44,6 +46,7 @@ class App extends React.Component<{ store: StateApi }> {
 
     return (
       <div>
+        <Timestamp timestamp={this.state.timestamp} />
         <SearchBar doSearch={this.props.store.setSearchTerm} />
         <ArticleList articles={articles} />
       </div>
