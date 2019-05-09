@@ -3,21 +3,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import ArticleList from './ArticleList'
 // tslint:disable-next-line: no-implicit-dependencies
-import StateApi, { IndexArticle, IArticle } from 'state-api'
+import StateApi, { IArticle } from 'state-api'
 import SearchBar from './SearchBar'
 import pickby from 'lodash.pickby'
 
-class App extends React.Component<
-  { store: StateApi },
-  {
-    articles: IndexArticle
-    searchTerm: string
-  }
-> {
-  state = {
-    articles: this.props.store.getState().articles,
-    searchTerm: '',
-  }
+class App extends React.Component<{ store: StateApi }> {
+  private subscriptionId: number = 0
+
+  state = this.props.store.getState()
 
   static childContextTypes = {
     store: PropTypes.object,
@@ -27,13 +20,22 @@ class App extends React.Component<
     store: this.props.store,
   })
 
-  setSearchTerm = (searchTerm: string) => {
-    this.setState({ searchTerm })
+  onStoreChange = () => {
+    this.setState(this.props.store.getState())
+  }
+
+  componentDidMount() {
+    this.subscriptionId = this.props.store.subscribe(this.onStoreChange)
+  }
+
+  componentWillUnmount() {
+    this.props.store.unsubscribe(this.subscriptionId)
   }
 
   render() {
-    let { articles } = this.state
     const { searchTerm } = this.state
+    let { articles } = this.state
+
     if (searchTerm) {
       articles = pickby<IArticle>(articles, value => {
         return value.title.match(searchTerm) || value.body.match(searchTerm)
@@ -42,7 +44,7 @@ class App extends React.Component<
 
     return (
       <div>
-        <SearchBar doSearch={this.setSearchTerm} />
+        <SearchBar doSearch={this.props.store.setSearchTerm} />
         <ArticleList articles={articles} />
       </div>
     )

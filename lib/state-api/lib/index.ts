@@ -29,6 +29,8 @@ type IndexData = {
 
 class StateApi {
   private data: IndexData
+  private subscriptions: { [key: number]: Function }
+  private lastSubscriptionsId: number
 
   constructor(rowData: IData) {
     this.data = {
@@ -36,6 +38,8 @@ class StateApi {
       authors: <IndexAuthor>this.mapIntoObject(rowData.authors),
       searchTerm: '',
     }
+    this.subscriptions = {}
+    this.lastSubscriptionsId = 0
   }
 
   mapIntoObject<T extends IArticle | IAuthor>(arr: T[]) {
@@ -54,6 +58,32 @@ class StateApi {
 
   lookupAuthor(authorId: string): IAuthor {
     return this.data.authors[authorId]
+  }
+
+  setSearchTerm = (searchTerm: string) => {
+    this.mergeWithState({ searchTerm })
+  }
+
+  subscribe = (cb: Function) => {
+    this.lastSubscriptionsId += 1
+    this.subscriptions[this.lastSubscriptionsId] = cb
+    return this.lastSubscriptionsId
+  }
+
+  unsubscribe = (subscriptionId: number) => {
+    delete this.subscriptions[subscriptionId]
+  }
+
+  notifySubscripbers = () => {
+    Object.values(this.subscriptions).forEach(cb => cb())
+  }
+
+  mergeWithState = (stateChange: object) => {
+    this.data = {
+      ...this.data,
+      ...stateChange,
+    }
+    this.notifySubscripbers()
   }
 }
 
