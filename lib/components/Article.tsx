@@ -29,25 +29,28 @@ const dateDisplay = (dateString: string): string => {
   return new Date(dateString).toDateString()
 }
 
-const Article: React.FC<{
+class Article extends React.PureComponent<{
   article: IArticle
   author?: IAuthor
-}> = ({ article, author }) => {
-  if (author) {
-    return (
-      <div style={styles.article}>
-        <div style={styles.title}>{article.title}</div>
-        <div style={styles.date}>{dateDisplay(article.date)}</div>
-        <div style={styles.author}>
-          <a href={author.website}>
-            {author.firstName} {author.lastName}
-          </a>
+}> {
+  render() {
+    const { article, author } = this.props
+    if (author) {
+      return (
+        <div style={styles.article}>
+          <div style={styles.title}>{article.title}</div>
+          <div style={styles.date}>{dateDisplay(article.date)}</div>
+          <div style={styles.author}>
+            <a href={author.website}>
+              {author.firstName} {author.lastName}
+            </a>
+          </div>
+          <div style={styles.body}>{article.body}</div>
         </div>
-        <div style={styles.body}>{article.body}</div>
-      </div>
-    )
+      )
+    }
+    return null
   }
-  return null
 }
 
 const extraProps = (store: StateApi, props: { article: IArticle }) => ({

@@ -11,8 +11,6 @@ import pickby from 'lodash.pickby'
 class App extends React.Component<{ store: StateApi }> {
   private subscriptionId: number = 0
 
-  state = this.props.store.getState()
-
   static childContextTypes = {
     store: PropTypes.object,
   }
@@ -21,8 +19,15 @@ class App extends React.Component<{ store: StateApi }> {
     store: this.props.store,
   })
 
+  appState = () => {
+    const { articles, searchTerm } = this.props.store.getState()
+    return { articles, searchTerm }
+  }
+
+  state = this.appState()
+
   onStoreChange = () => {
-    this.setState(this.props.store.getState())
+    this.setState(this.appState)
   }
 
   componentDidMount() {

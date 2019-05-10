@@ -31,9 +31,15 @@ const storeProvider = (extraProps: Function = () => ({})) => <P extends object>(
     }
     private subscriptionId: number | null = 0
 
+    usedState = () => {
+      return extraProps(this.context.store, this.props)
+    }
+
+    state = this.usedState()
+
     onStoreChange = () => {
       if (typeof this.subscriptionId === 'number') {
-        this.forceUpdate()
+        this.setState(this.usedState())
       }
     }
 
@@ -50,7 +56,7 @@ const storeProvider = (extraProps: Function = () => ({})) => <P extends object>(
       return (
         <Component
           {...this.props}
-          {...extraProps(this.context.store, this.props)}
+          {...this.usedState()}
           store={this.context.store}
         />
       )
