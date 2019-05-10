@@ -9,7 +9,8 @@
   "scripts": {
     "dev": "NODE_PATH=./lib nodemon lib/server.ts",
     "build": "webpack -wd",
-    "test": "jest --watch"
+    "test": "jest --watch",
+    "verify-tests": "jest --coverage"
   },
   "dependencies": {
     "axios": "^0.18.0",
