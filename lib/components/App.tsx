@@ -8,7 +8,7 @@ import SearchBar from './SearchBar'
 import Timestamp from './Timestamp'
 import pickby from 'lodash.pickby'
 
-class App extends React.Component<{ store: StateApi }> {
+class App extends React.PureComponent<{ store: StateApi }> {
   private subscriptionId: number = 0
 
   static childContextTypes = {

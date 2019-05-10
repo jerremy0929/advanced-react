@@ -42,6 +42,22 @@ class StateApi {
     }
     this.subscriptions = {}
     this.lastSubscriptionsId = 0
+
+    setTimeout(() => {
+      const fakeArticle = {
+        ...rowData.articles[0],
+        id: 'fakeArticleId',
+      }
+      // this.data.articles[fakeArticle.id] = fakeArticle
+      this.data = {
+        ...this.data,
+        articles: {
+          ...this.data.articles,
+          [fakeArticle.id]: fakeArticle,
+        },
+      }
+      this.notifySubscripbers()
+    }, 1000)
   }
 
   mapIntoObject<T extends IArticle | IAuthor>(arr: T[]) {
